@@ -1,20 +1,16 @@
 package hijonoob.beetleescape;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GameView extends SurfaceView {
     GameLoop gameLoop;
@@ -28,15 +24,16 @@ public class GameView extends SurfaceView {
 
     private List<Background> backgroundList = new ArrayList<Background>();
     //private List<Buttons> buttons = new ArrayList<Buttons>();
-
-    private static SharedPreferences prefs;
+    private Beetle beetle;
+    //private static SharedPreferences prefs;
 
     private String Menu = "Running";
 
     public GameView(Context context) {
         super(context);
-        prefs = context.getSharedPreferences("hijonoob.beetleescape",context.MODE_PRIVATE);
-        String spackage ="hijonoob.beetleescape";
+        beetle = new Beetle(this);
+        //prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
+        //String spackage ="hijonoob.beetleescape";
         gameLoop = new GameLoop(this);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -70,9 +67,10 @@ public class GameView extends SurfaceView {
         //{
         //    pplayer.ontouch();
         //}
-        if (Menu =="Mainmenu")
+        beetle.ontouch(e.getY());
+/*        if (Menu =="Mainmenu")
         {
-/*            for(int i = 0; i < buttons.size(); i++){
+            for(int i = 0; i < buttons.size(); i++){
                 if (buttons.get(i).getState() == 1){   // Restart
                     if ((buttons.get(i).getX()<e.getX() && buttons.get(i).getX()+84>e.getX())){
                         if (buttons.get(i).getY()<e.getY() && buttons.get(i).getY()+32>e.getY()){
@@ -81,19 +79,20 @@ public class GameView extends SurfaceView {
                     }
                 }
 
-            }*/
-        }
+            }
+        }*/
         return false;
     }
 
     public void update(){
-        if(Menu=="Running"){
+        if(Menu.equals("Running")){
             updatetimers();
         }
     }
 
     public void updatetimers(){
-        if (Menu=="Running"){
+        // enum
+        if (Menu.equals("Running")){
             deletebackground();
         }
     }
@@ -122,44 +121,48 @@ public class GameView extends SurfaceView {
         }
 
     }
-    public void startGame(){
-/*        for(int i = 0; i < buttons.size(); i++){
+ /*   public void startGame(){
+        for(int i = 0; i < buttons.size(); i++){
             buttons.remove(i);
-        }*/
+        }
         //player.add(new Player(this,playerbmp,50,50));
-    }
+    }*/
 
-    public void endGame(){
+  /*  public void endGame(){
         Menu="Mainmenu";
-  /*      buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
-        buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));*/
+        buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
+        buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));
 
         //player.remove(0);
-    }
+    }*/
 
     @Override
     protected void onDraw(Canvas canvas) {
         update();
-        canvas.drawColor(Color.CYAN);
+        //canvas.drawColor(Color.CYAN);
         // If the menu is Main menu, draw the button
-        if (Menu.equals("Mainmenu"))
+ /*       if (Menu.equals("Mainmenu"))
         {
-/*            for(Buttons bbuttons: buttons)
+            for(Buttons bbuttons: buttons)
             {
                 bbuttons.onDraw(canvas);
-            }*/
-        }
+            }
+        }*/
         // If the game is running, draw it
         if (Menu.equals("Running")){
             addbackground();
-            Paint textpaint = new Paint();
-
-            textpaint.setTextSize(32);
-            canvas.drawText("arrrgh ", 0, 96, textpaint);
 
             for(Background bbackground: backgroundList){
                 bbackground.onDraw(canvas);
             }
+            beetle.onDraw(canvas);
+
+            Paint textpaint = new Paint();
+
+            textpaint.setTextSize(32);
+            canvas.drawText("Texto", 0, 40, textpaint);
+
+
             //for(Player pplayer: player)
             //{
             //    pplayer.onDraw(canvas);
