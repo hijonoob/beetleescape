@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -21,6 +22,7 @@ public class GameView extends SurfaceView {
     Bitmap background;
     //Bitmap buttonsbmp;
     int xx = 0;
+    int pontos = 0;
 
     private List<Background> backgroundList = new ArrayList<Background>();
     //private List<Buttons> buttons = new ArrayList<Buttons>();
@@ -87,6 +89,7 @@ public class GameView extends SurfaceView {
     public void update(){
         if(Menu.equals("Running")){
             updatetimers();
+            pontos++;
         }
     }
 
@@ -158,9 +161,9 @@ public class GameView extends SurfaceView {
             beetle.onDraw(canvas);
 
             Paint textpaint = new Paint();
-
+            textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
-            canvas.drawText("Texto", 0, 40, textpaint);
+            canvas.drawText("Pontuação: " +  pontos, 0, 40, textpaint);
 
 
             //for(Player pplayer: player)
@@ -170,6 +173,7 @@ public class GameView extends SurfaceView {
         }
         if (Menu.equals("Mainmenu")) {
             Paint textpaint = new Paint();
+            textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
             canvas.drawText("arrgh2 ", canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
         }

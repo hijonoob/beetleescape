@@ -11,7 +11,9 @@ import android.graphics.Paint;
 public class Beetle {
 
     GameView gameview;
-    private int altura;
+    private int altura = 200;
+    private int velocidade;
+    private int gravidade = 1;
     Paint paint;
 
     public Beetle(GameView gameview){
@@ -23,21 +25,31 @@ public class Beetle {
 
     public void ontouch(float y){
         if(y<gameview.getHeight()-60) {
-            altura += 10;
-        }
-        else {
-            altura -=20;
+            velocidade -= 10;
+        } else {
+            velocidade += 10;
         }
     }
 
     public void update(){
-       // checar clique
+        velocidade += gravidade;
+        if(altura < 20){
+            if (velocidade < 0) {
+                velocidade = 0;
+            }
+        }
+        if (altura > gameview.getHeight()-20){
+            if (velocidade > 0) {
+                velocidade = 0;
+            }
+        }
+        altura += velocidade;
     }
 
     public void onDraw(Canvas canvas)
     {
-        //update();
-        canvas.drawCircle(50, gameview.getHeight()/3 - altura, 30, paint);
+        update();
+        canvas.drawCircle(50, altura, 30, paint);
     }
 
 }
