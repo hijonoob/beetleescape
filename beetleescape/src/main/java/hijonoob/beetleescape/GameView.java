@@ -20,20 +20,22 @@ public class GameView extends SurfaceView {
     public static int globalxSpeed = 10;
 
     Bitmap background;
-    //Bitmap buttonsbmp;
+    Bitmap beetlebmp;
+
     int xx = 0;
     int pontos = 0;
+    int contadorx = 0;
 
     private List<Background> backgroundList = new ArrayList<Background>();
-    //private List<Buttons> buttons = new ArrayList<Buttons>();
-    private Beetle beetle;
+    private List<Beetle> beetleList = new ArrayList<Beetle>();
+    //private Beetle beetlePlayer;
     //private static SharedPreferences prefs;
 
     private String Menu = "Running";
 
     public GameView(Context context) {
         super(context);
-        beetle = new Beetle(this);
+        //beetlePlayer = new Beetle(this);
         //prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
         //String spackage ="hijonoob.beetleescape";
         gameLoop = new GameLoop(this);
@@ -56,8 +58,9 @@ public class GameView extends SurfaceView {
             }
 
         });
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
-        //buttonsbmp = BitmapFactory.decodeResource(getResources(), R.drawable.buttons);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.cenarioclaro);
+        beetlebmp = BitmapFactory.decodeResource(getResources(), R.drawable.beetlesprite);
+        beetleList.add(new Beetle(this,beetlebmp));
         //player.add(new Player(this,playerbmp,50,50));
     }
 
@@ -65,11 +68,14 @@ public class GameView extends SurfaceView {
     @Override
     public boolean onTouchEvent(MotionEvent e){
 
+        for(Beetle bbeetle: beetleList){
+            bbeetle.ontouch(e.getY());
+        }
         //for(Player pplayer: player)
         //{
         //    pplayer.ontouch();
         //}
-        beetle.ontouch(e.getY());
+        //beetle.ontouch(e.getY());
 /*        if (Menu =="Mainmenu")
         {
             for(int i = 0; i < buttons.size(); i++){
@@ -95,6 +101,12 @@ public class GameView extends SurfaceView {
 
     public void updatetimers(){
         // enum
+        contadorx++;
+        if(contadorx >= 100) {
+            globalxSpeed++;
+            contadorx = 0;
+        }
+
         if (Menu.equals("Running")){
             deletebackground();
         }
@@ -103,10 +115,10 @@ public class GameView extends SurfaceView {
 
     public void addbackground(){
 
-        while(xx < this.getWidth()+Background.width)
+        while(xx < 2*this.getWidth())
         {
             backgroundList.add(new Background(this,background,xx,0));
-            xx += background.getWidth();
+            xx += this.getWidth();
         }
 
     }
@@ -117,9 +129,9 @@ public class GameView extends SurfaceView {
         {
             int backgroundx = backgroundList.get(i).returnX();
 
-            if (backgroundx<=-Background.width){
+            if (backgroundx<=-this.getWidth()){
                 backgroundList.remove(i);
-                backgroundList.add(new Background(this,background,backgroundx+this.getWidth()+Background.width,0));
+                backgroundList.add(new Background(this,background,backgroundx+2*this.getWidth(),0));
             }
         }
 
@@ -142,7 +154,6 @@ public class GameView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         update();
-        //canvas.drawColor(Color.CYAN);
         // If the menu is Main menu, draw the button
  /*       if (Menu.equals("Mainmenu"))
         {
@@ -158,12 +169,15 @@ public class GameView extends SurfaceView {
             for(Background bbackground: backgroundList){
                 bbackground.onDraw(canvas);
             }
-            beetle.onDraw(canvas);
+            for(Beetle bbeetle: beetleList) {
+                bbeetle.onDraw(canvas);
+            }
+            //beetlePlayer.onDraw(canvas);
 
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
-            canvas.drawText("Pontuação: " +  pontos, 0, 40, textpaint);
+            canvas.drawText("Pontuação: " +  pontos/10, 0, 40, textpaint);
 
 
             //for(Player pplayer: player)

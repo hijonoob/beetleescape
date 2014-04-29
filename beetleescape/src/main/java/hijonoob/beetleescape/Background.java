@@ -2,6 +2,7 @@ package hijonoob.beetleescape;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 public class Background {
 
@@ -9,7 +10,7 @@ public class Background {
     public static int height;
     private GameView gameview;
     private Bitmap bmp;
-    private  int x;
+    private int x;
     private int y;
 
     public Background(GameView gameview, Bitmap bmp, int x, int y){
@@ -17,12 +18,12 @@ public class Background {
         this.bmp = bmp;
         this.x = x;
         this.y = y;
-        this.width = bmp.getWidth();
-        this.height = bmp.getHeight();
+        width = bmp.getWidth();
+        height = bmp.getHeight();
     }
 
     public void update(){
-        x-=gameview.globalxSpeed;
+        x -= gameview.globalxSpeed;
     }
 
     public int returnX(){
@@ -32,6 +33,10 @@ public class Background {
     public void onDraw(Canvas canvas)
     {
         update();
-        canvas.drawBitmap(bmp, x, gameview.getHeight()-bmp.getHeight(), null);
+
+        Rect src = new Rect(0,0,width,height);
+        Rect dst = new Rect(x,0,gameview.getWidth()+x, gameview.getHeight());
+        canvas.drawBitmap(bmp,src,dst,null);
+        //canvas.drawBitmap(bmp, x, gameview.getHeight()-bmp.getHeight(), null);
     }
 }
