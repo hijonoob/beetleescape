@@ -128,7 +128,7 @@ public class GameView extends SurfaceView {
 
             if (backgroundx<=-this.getWidth()){
                 backgroundList.remove(i);
-                backgroundList.add(new Background(this,background,this.getWidth(),0));
+                backgroundList.add(new Background(this,background,0,0));
             }
         }
 
