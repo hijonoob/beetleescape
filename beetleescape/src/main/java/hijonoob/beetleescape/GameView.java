@@ -22,7 +22,7 @@ public class GameView extends SurfaceView {
     Bitmap background;
     Bitmap beetlebmp;
 
-    int xx = 0;
+    //int xx = 0;
     int pontos = 0;
     int contadorx = 0;
 
@@ -31,11 +31,10 @@ public class GameView extends SurfaceView {
     //private Beetle beetlePlayer;
     //private static SharedPreferences prefs;
 
-    private String Menu = "Running";
+    private String Menu = "Mainmenu";
 
     public GameView(Context context) {
         super(context);
-        //beetlePlayer = new Beetle(this);
         //prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
         //String spackage ="hijonoob.beetleescape";
         gameLoop = new GameLoop(this);
@@ -58,10 +57,9 @@ public class GameView extends SurfaceView {
             }
 
         });
+
         background = BitmapFactory.decodeResource(getResources(), R.drawable.cenarioclaro);
         beetlebmp = BitmapFactory.decodeResource(getResources(), R.drawable.beetlesprite);
-        beetleList.add(new Beetle(this,beetlebmp));
-        //player.add(new Player(this,playerbmp,50,50));
     }
 
 
@@ -71,11 +69,10 @@ public class GameView extends SurfaceView {
         for(Beetle bbeetle: beetleList){
             bbeetle.ontouch(e.getY());
         }
-        //for(Player pplayer: player)
-        //{
-        //    pplayer.ontouch();
-        //}
-        //beetle.ontouch(e.getY());
+
+        if (Menu.equals("Mainmenu")) {
+            startGame();
+        }
 /*        if (Menu =="Mainmenu")
         {
             for(int i = 0; i < buttons.size(); i++){
@@ -95,32 +92,32 @@ public class GameView extends SurfaceView {
     public void update(){
         if(Menu.equals("Running")){
             updatetimers();
-            pontos++;
+            pontos+= globalxSpeed;
+        }
+        if(Menu.equals("Mainmenu")) {
+            // TODO
+            //updatetimers();
         }
     }
 
     public void updatetimers(){
         // enum
-        contadorx++;
-        if(contadorx >= 100) {
-            globalxSpeed++;
-            contadorx = 0;
-        }
-
-        if (Menu.equals("Running")){
+        if (Menu.equals("Running")) {
             deletebackground();
+            contadorx++;
+            if(contadorx >= 100) {
+                globalxSpeed++;
+                contadorx = 0;
+            }
+        }
+        if(Menu.equals("Mainmenu")) {
+            //TODO
         }
     }
 
 
     public void addbackground(){
-
-        while(xx < 2*this.getWidth())
-        {
-            backgroundList.add(new Background(this,background,xx,0));
-            xx += this.getWidth();
-        }
-
+        backgroundList.add(new Background(this,background,0,0));
     }
 
     public void deletebackground(){
@@ -131,65 +128,56 @@ public class GameView extends SurfaceView {
 
             if (backgroundx<=-this.getWidth()){
                 backgroundList.remove(i);
-                backgroundList.add(new Background(this,background,backgroundx+2*this.getWidth(),0));
+                backgroundList.add(new Background(this,background,this.getWidth(),0));
             }
         }
 
     }
- /*   public void startGame(){
-        for(int i = 0; i < buttons.size(); i++){
+   public void startGame(){
+       Menu="Running";
+       addbackground();
+       beetleList.add(new Beetle(this,beetlebmp));
+       /* for(int i = 0; i < buttons.size(); i++){
             buttons.remove(i);
-        }
-        //player.add(new Player(this,playerbmp,50,50));
-    }*/
+        }*/
+    }
 
-  /*  public void endGame(){
-        Menu="Mainmenu";
-        buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
-        buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));
-
-        //player.remove(0);
-    }*/
+   public void endGame(){
+       beetleList.remove(0);
+       Menu="Mainmenu";
+       //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
+       //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         update();
-        // If the menu is Main menu, draw the button
- /*       if (Menu.equals("Mainmenu"))
-        {
-            for(Buttons bbuttons: buttons)
-            {
-                bbuttons.onDraw(canvas);
-            }
-        }*/
         // If the game is running, draw it
         if (Menu.equals("Running")){
-            addbackground();
-
+            //addbackground();
             for(Background bbackground: backgroundList){
                 bbackground.onDraw(canvas);
             }
             for(Beetle bbeetle: beetleList) {
                 bbeetle.onDraw(canvas);
             }
-            //beetlePlayer.onDraw(canvas);
 
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
-            canvas.drawText("Pontuação: " +  pontos/10, 0, 40, textpaint);
-
-
-            //for(Player pplayer: player)
-            //{
-            //    pplayer.onDraw(canvas);
-            //}
+            canvas.drawText("Distância: " +  pontos/10 + " cm ", 0, 40, textpaint);
         }
+        // If the menu is Main menu, draw the button
         if (Menu.equals("Mainmenu")) {
+
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
-            canvas.drawText("arrgh2 ", canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
+            canvas.drawText("Iniciar Jogo", canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
+            /* for(Buttons bbuttons: buttons)
+            {
+                bbuttons.onDraw(canvas);
+            }*/
         }
     }
 }

@@ -35,7 +35,7 @@ public class Background {
         update();
 
         Rect src = new Rect(0,0,width,height);
-        Rect dst = new Rect(x,0,gameview.getWidth()+x, gameview.getHeight());
+        Rect dst = new Rect(x,-gameview.getHeight()/2,gameview.getWidth()*2+x, gameview.getHeight()+gameview.getHeight()/2);
         canvas.drawBitmap(bmp,src,dst,null);
         //canvas.drawBitmap(bmp, x, gameview.getHeight()-bmp.getHeight(), null);
     }

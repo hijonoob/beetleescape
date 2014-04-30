@@ -42,11 +42,12 @@ public class Beetle {
 
     public void ontouch(float y){
         if(y<gameview.getHeight()-60) {
-            velocidade -= 10;
+            velocidade -= 50;
         } else {
-            velocidade += 10;
+            velocidade += 50;
         }
-        player.start();
+        // removendo o som nos testes
+        //player.start();
     }
 
     public void switchanimations(){
