@@ -28,6 +28,7 @@ public class GameView extends SurfaceView {
 
     private List<Background> backgroundList = new ArrayList<Background>();
     private List<Beetle> beetleList = new ArrayList<Beetle>();
+    private List<Barreira> barreiraList = new ArrayList<Barreira>();
     //private Beetle beetlePlayer;
     //private static SharedPreferences prefs;
 
@@ -142,6 +143,13 @@ public class GameView extends SurfaceView {
                 backgroundList.get(i).setX(this.getWidth()*2);
             }
         }
+
+        for (int i = barreiraList.size()-1;i >= 0; i--) {
+            int barreirax = backgroundList.get(i).returnX();
+            if (barreirax <= -this.getWidth() * 2) {
+                backgroundList.remove(i);
+            }
+        }
 /*
         for (int i = backgroundList.size()-1;i >= 0; i--)
         {
@@ -164,6 +172,7 @@ public class GameView extends SurfaceView {
        Menu="Running";
        addbackground();
        beetleList.add(new Beetle(this,beetlebmp));
+       barreiraList.add(new Barreira(this, this.getWidth()*2));
        /* for(int i = 0; i < buttons.size(); i++){
             buttons.remove(i);
         }*/
@@ -187,6 +196,9 @@ public class GameView extends SurfaceView {
             }
             for(Beetle bbeetle: beetleList) {
                 bbeetle.onDraw(canvas);
+            }
+            for(Barreira bbarreira: barreiraList) {
+                bbarreira.onDraw(canvas);
             }
 
             Paint textpaint = new Paint();
