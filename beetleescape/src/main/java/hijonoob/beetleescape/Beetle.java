@@ -14,9 +14,10 @@ import android.media.MediaPlayer;
 public class Beetle {
 
     GameView gameview;
-    private int altura = 200;
+    private int altura;
     private int velocidade;
     private int gravidade = 1;
+    private boolean jumping = false;
 
     private int mcurrentFrame = 0;
 
@@ -33,6 +34,7 @@ public class Beetle {
         this.bmp = bmp;
         this.width = bmp.getWidth()/colunas;
         this.height = bmp.getHeight();
+        this.altura = (int) (gameview.getHeight() * 0.75);
         paint = new Paint();
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
@@ -41,13 +43,17 @@ public class Beetle {
     }
 
     public void ontouch(float y){
-        if(y<gameview.getHeight()-60) {
-            velocidade -= 50;
-        } else {
-            velocidade += 50;
+        if (!jumping) {
+            if (y < gameview.getHeight() * 0.75) {
+                velocidade -= 50;
+                // som de marcação
+                player.start();
+            } else {
+                velocidade += 10;
+                gameview.pontos = 0;
+            }
+            jumping = true;
         }
-        // removendo o som nos testes
-        //player.start();
     }
 
     public void switchanimations(){
@@ -60,15 +66,17 @@ public class Beetle {
     public void update(){
         switchanimations();
         velocidade += gravidade;
-        if(altura < 20){
+
+        if(altura < gameview.getHeight()*0.25 + height/3){
             if (velocidade < 0) {
                 velocidade = (velocidade * -1) / 2;
             }
         }
-        if (altura > gameview.getHeight()-20){
+        if (altura > gameview.getHeight() * 0.82){
             if (velocidade > 0) {
-                velocidade = (velocidade * -1) / 2;
+                velocidade = (velocidade * -1) / 5;
             }
+            jumping = false;
         }
         altura += velocidade;
     }
@@ -82,7 +90,7 @@ public class Beetle {
         int srcX = mcurrentFrame*width;
         int srcY = 0;
         Rect src = new Rect(srcX,srcY,srcX + width,srcY+height);
-        Rect dst = new Rect(30,altura-height/2,(30 + (width / 2)), altura);
+        Rect dst = new Rect(50,altura-height/2,(50 + (width / 2)), altura);
         canvas.drawBitmap(bmp,src,dst,null);
     }
 

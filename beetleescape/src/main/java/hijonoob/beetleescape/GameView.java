@@ -103,7 +103,7 @@ public class GameView extends SurfaceView {
     public void updatetimers(){
         // enum
         if (Menu.equals("Running")) {
-            deletebackground();
+            movebackground();
             contadorx++;
             if(contadorx >= 100) {
                 globalxSpeed++;
@@ -118,20 +118,47 @@ public class GameView extends SurfaceView {
 
     public void addbackground(){
         backgroundList.add(new Background(this,background,0,0));
+        backgroundList.add(new Background(this,background,this.getWidth()*2,0));
     }
 
-    public void deletebackground(){
+    public void movebackground(){
 
+        //if (backgroundList.get(0).returnX()/10 == -this.getWidth()/10) {
+        //    backgroundList.add(new Background(this,background,this.getWidth(),0));
+        //}
+/*        if (backgroundList.get(0).returnX() == -this.getWidth()*2) {
+            backgroundList.remove(0);
+        }
+*/
+        /*for (int i = backgroundList.size()-1;i >= 0; i--) {
+            int backgroundx = backgroundList.get(i).returnX();
+            if (backgroundx <= -this.getWidth() * 2) {
+                backgroundList.remove(i);
+            }
+        }*/
+        for (int i = backgroundList.size()-1;i >= 0; i--) {
+            int backgroundx = backgroundList.get(i).returnX();
+            if (backgroundx <= -this.getWidth() * 2) {
+                backgroundList.get(i).setX(this.getWidth()*2);
+            }
+        }
+/*
         for (int i = backgroundList.size()-1;i >= 0; i--)
         {
             int backgroundx = backgroundList.get(i).returnX();
 
             if (backgroundx<=-this.getWidth()){
+                pontos = 0;
+                //backgroundList.remove(i);
+                backgroundList.add(new Background(this,background,this.getWidth(),0));
+            }
+            if (backgroundx<=-this.getWidth()*2){
+                pontos = 0;
                 backgroundList.remove(i);
-                backgroundList.add(new Background(this,background,0,0));
+                //backgroundList.add(new Background(this,background,this.getWidth(),0));
             }
         }
-
+*/
     }
    public void startGame(){
        Menu="Running";
@@ -173,7 +200,7 @@ public class GameView extends SurfaceView {
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
-            canvas.drawText("Iniciar Jogo", canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
+            canvas.drawText("Iniciar Jogo", canvas.getWidth()/2-100, canvas.getHeight()/2, textpaint);
             /* for(Buttons bbuttons: buttons)
             {
                 bbuttons.onDraw(canvas);
