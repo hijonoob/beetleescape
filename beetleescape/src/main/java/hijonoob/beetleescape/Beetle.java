@@ -81,6 +81,11 @@ public class Beetle {
         altura += velocidade;
     }
 
+    public Rect GetBounds()
+    {
+        return new Rect(50,altura-height/2,(50 + (width / 2)), altura);
+    }
+
     public void onDraw(Canvas canvas)
     {
         update();

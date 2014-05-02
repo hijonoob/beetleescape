@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -180,6 +181,12 @@ public class GameView extends SurfaceView {
 
    public void endGame(){
        beetleList.remove(0);
+       for(int i = 0; i < barreiraList.size(); i++) {
+           barreiraList.remove(i);
+       }
+       for(int i = 0; i < backgroundList.size(); i++) {
+           backgroundList.remove(i);
+       }
        Menu="Mainmenu";
        //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
        //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));
@@ -197,18 +204,29 @@ public class GameView extends SurfaceView {
             for(Beetle bbeetle: beetleList) {
                 bbeetle.onDraw(canvas);
             }
-            for(Barreira bbarreira: barreiraList) {
-                bbarreira.onDraw(canvas);
-            }
 
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);
             canvas.drawText("Distância: " +  pontos/10 + " cm ", 0, 40, textpaint);
+
+            for(int i = 0; i < barreiraList.size(); i++) {
+                barreiraList.get(i).onDraw(canvas);
+                if (beetleList.size()>0) {
+                    Rect beetler = beetleList.get(0).GetBounds();
+                    Rect spikesr = barreiraList.get(i).GetBounds();
+                    if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
+                        pontos = 0;
+                        endGame();
+                        break;
+                    }
+                }
+            }
+
         }
         // If the menu is Main menu, draw the button
         if (Menu.equals("Mainmenu")) {
-
+            canvas.drawColor(Color.DKGRAY);
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(32);

@@ -3,6 +3,7 @@ package hijonoob.beetleescape;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 /**
  * Created by dbarbato on 01/05/14.
@@ -13,6 +14,8 @@ public class Barreira {
     Paint paint;
     int x;
     int altura;
+    private Rect bettler;
+    private Rect barreirar;
 
     public Barreira(GameView gameview, int x){
         this.gameview = gameview;
@@ -25,6 +28,16 @@ public class Barreira {
 
     public void update(){
         x -= gameview.globalxSpeed;
+    }
+
+    public Rect GetBounds() {
+        return new Rect(this.x,this.altura,this.x+gameview.getHeight()/2,this.altura+gameview.getHeight()/2);
+    }
+
+    public boolean checkCollision(Rect bettler, Rect barreirar){
+        this.bettler = bettler;
+        this.barreirar = barreirar;
+        return Rect.intersects(bettler, barreirar);
     }
 
     public int returnX(){
