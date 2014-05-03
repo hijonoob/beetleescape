@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameView extends SurfaceView {
     GameLoop gameLoop;
@@ -26,6 +27,8 @@ public class GameView extends SurfaceView {
     //int xx = 0;
     int pontos = 0;
     int contadorx = 0;
+
+    final Random barreiraRandom = new Random();
 
     private List<Background> backgroundList = new ArrayList<Background>();
     private List<Beetle> beetleList = new ArrayList<Beetle>();
@@ -57,7 +60,6 @@ public class GameView extends SurfaceView {
             public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
                 // TODO Auto-generated method stub
             }
-
         });
 
         background = BitmapFactory.decodeResource(getResources(), R.drawable.cenarioclaro);
@@ -173,7 +175,7 @@ public class GameView extends SurfaceView {
        Menu="Running";
        addbackground();
        beetleList.add(new Beetle(this,beetlebmp));
-       barreiraList.add(new Barreira(this, this.getWidth()*2));
+       barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()*2)+this.getWidth()/2));
        /* for(int i = 0; i < buttons.size(); i++){
             buttons.remove(i);
         }*/
