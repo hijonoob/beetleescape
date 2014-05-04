@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,6 +28,8 @@ public class GameView extends SurfaceView {
     //int xx = 0;
     int pontos = 0;
     int contadorx = 0;
+    int contadorBarreira = 0;
+    int alturaBarreira = 1;
 
     final Random barreiraRandom = new Random();
 
@@ -97,6 +100,8 @@ public class GameView extends SurfaceView {
         if(Menu.equals("Running")){
             updatetimers();
             pontos+= globalxSpeed;
+            contadorBarreira+=globalxSpeed;
+            criaBarreira();
         }
         if(Menu.equals("Mainmenu")) {
             // TODO
@@ -148,9 +153,9 @@ public class GameView extends SurfaceView {
         }
 
         for (int i = barreiraList.size()-1;i >= 0; i--) {
-            int barreirax = backgroundList.get(i).returnX();
+            int barreirax = barreiraList.get(i).returnX();
             if (barreirax <= -this.getWidth() * 2) {
-                backgroundList.remove(i);
+                barreiraList.remove(i);
             }
         }
 /*
@@ -175,10 +180,18 @@ public class GameView extends SurfaceView {
        Menu="Running";
        addbackground();
        beetleList.add(new Beetle(this,beetlebmp));
-       barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()*2)+this.getWidth()/2));
        /* for(int i = 0; i < buttons.size(); i++){
             buttons.remove(i);
         }*/
+    }
+
+    public void criaBarreira() {
+        if (contadorBarreira>2000) {
+            alturaBarreira = barreiraRandom.nextInt(3);
+            Log.i("info", String.valueOf(alturaBarreira));
+            barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth(), alturaBarreira));
+            contadorBarreira = 0;
+        }
     }
 
    public void endGame(){
