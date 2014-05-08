@@ -1,5 +1,6 @@
 package hijonoob.beetleescape;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,13 +15,19 @@ public class Barreira {
     Paint paint;
     int x;
     int y;
+    int width;
+    int height;
     int altura;
     int alturaDesenho;
     private Rect bettler;
     private Rect barreirar;
+    private Bitmap bmp;
 
-    public Barreira(GameView gameview, int x, int y){
+    public Barreira(GameView gameview, int x, int y, Bitmap bmp){
         this.gameview = gameview;
+        this.bmp = bmp;
+        this.width = bmp.getWidth();
+        this.height = bmp.getHeight();
         this.x = x;
         this.y = y;
         paint = new Paint();
@@ -48,7 +55,7 @@ public class Barreira {
                 altura = (int) (gameview.getHeight()*0.75);
                 break;
         }
-        return new Rect(x,altura,x+gameview.getHeight()/2,altura+gameview.getHeight()/2);
+        return new Rect(x-gameview.getHeight()/16,altura,x+gameview.getHeight()/2,altura+gameview.getHeight()/4);
     }
 
     public boolean checkCollision(Rect bettler, Rect barreirar){
@@ -65,19 +72,23 @@ public class Barreira {
         update();
         switch (y){
             case 0:
-                alturaDesenho = 0;
+                alturaDesenho = (int) (gameview.getHeight() * -0.15);
                 break;
             case 1:
                 alturaDesenho = (int) (gameview.getHeight() * 0.5);
                 break;
             case 2:
-                alturaDesenho = gameview.getHeight();
+                alturaDesenho = (int) (gameview.getHeight() * 1.15);
                 break;
             default:
                 alturaDesenho = (int) (gameview.getHeight() * 0.5);
                 break;
         }
-        canvas.drawCircle(x,alturaDesenho,gameview.getHeight()/4,paint);
+        //canvas.drawCircle(x,alturaDesenho,gameview.getHeight()/4,paint);
+
+        Rect src = new Rect(0,0,width,height);
+        Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/3,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2);
+        canvas.drawBitmap(bmp,src,dst,null);
 
     }
 

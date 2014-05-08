@@ -39,7 +39,7 @@ public class Beetle {
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
 
-        player = MediaPlayer.create(gameview.getContext(),R.drawable.efeitosonoro);
+        player = MediaPlayer.create(gameview.getContext(),R.drawable.pulo);
     }
 
     public void ontouch(float y){

@@ -24,6 +24,8 @@ public class GameView extends SurfaceView {
 
     Bitmap background;
     Bitmap beetlebmp;
+    Bitmap barreirabmp;
+    Bitmap buracobmp;
 
     //int xx = 0;
     int pontos = 0;
@@ -67,6 +69,8 @@ public class GameView extends SurfaceView {
 
         background = BitmapFactory.decodeResource(getResources(), R.drawable.cenarioclaro);
         beetlebmp = BitmapFactory.decodeResource(getResources(), R.drawable.beetlesprite);
+        barreirabmp = BitmapFactory.decodeResource(getResources(), R.drawable.barreira);
+        buracobmp = BitmapFactory.decodeResource(getResources(), R.drawable.buraco);
     }
 
 
@@ -103,10 +107,10 @@ public class GameView extends SurfaceView {
             contadorBarreira+=globalxSpeed;
             criaBarreira();
         }
-        if(Menu.equals("Mainmenu")) {
+        /*if(Menu.equals("Mainmenu")) {
             // TODO
             //updatetimers();
-        }
+        }*/
     }
 
     public void updatetimers(){
@@ -119,9 +123,9 @@ public class GameView extends SurfaceView {
                 contadorx = 0;
             }
         }
-        if(Menu.equals("Mainmenu")) {
+        /*if(Menu.equals("Mainmenu")) {
             //TODO
-        }
+        }*/
     }
 
 
@@ -189,7 +193,7 @@ public class GameView extends SurfaceView {
         if (contadorBarreira>2000) {
             alturaBarreira = barreiraRandom.nextInt(3);
             Log.i("info", String.valueOf(alturaBarreira));
-            barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth(), alturaBarreira));
+            barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth(), alturaBarreira, barreirabmp));
             contadorBarreira = 0;
         }
     }
@@ -220,11 +224,6 @@ public class GameView extends SurfaceView {
                 bbeetle.onDraw(canvas);
             }
 
-            Paint textpaint = new Paint();
-            textpaint.setColor(Color.WHITE);
-            textpaint.setTextSize(32);
-            canvas.drawText("Distância: " +  pontos/10 + " cm ", 0, 40, textpaint);
-
             for(int i = 0; i < barreiraList.size(); i++) {
                 barreiraList.get(i).onDraw(canvas);
                 if (beetleList.size()>0) {
@@ -232,11 +231,18 @@ public class GameView extends SurfaceView {
                     Rect spikesr = barreiraList.get(i).GetBounds();
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
                         pontos = 0;
+                        globalxSpeed = 10;
                         endGame();
                         break;
                     }
                 }
             }
+
+
+            Paint textpaint = new Paint();
+            textpaint.setColor(Color.WHITE);
+            textpaint.setTextSize(32);
+            canvas.drawText("Distância: " +  pontos/10 + " cm ", 0, 40, textpaint);
 
         }
         // If the menu is Main menu, draw the button
