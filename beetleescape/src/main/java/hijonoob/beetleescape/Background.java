@@ -30,17 +30,27 @@ public class Background {
         return x;
     }
 
+    //public int returnY() { return y; }
+
+    public void setY(int topo) {
+        if (topo == 1){
+            y = y-gameview.getHeight()*6;
+        } else {
+            y = y+gameview.getHeight()*6;
+        }
+}
+
     public void setX(int x) {
         this.x = x;
     }
+
 
     public void onDraw(Canvas canvas)
     {
         update();
 
         Rect src = new Rect(0,0,width,height);
-        Rect dst = new Rect(x,-gameview.getHeight()/2,gameview.getWidth()*2+x, gameview.getHeight()+gameview.getHeight()/2);
+        Rect dst = new Rect(x,-gameview.getHeight()/2 + gameview.globalySpeed+y,gameview.getWidth()*2+x, gameview.getHeight()+gameview.getHeight()/2 + gameview.globalySpeed + y);
         canvas.drawBitmap(bmp,src,dst,null);
-        //canvas.drawBitmap(bmp, x, gameview.getHeight()-bmp.getHeight(), null);
     }
 }

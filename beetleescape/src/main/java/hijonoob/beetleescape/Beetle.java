@@ -39,15 +39,14 @@ public class Beetle {
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
 
-        player = MediaPlayer.create(gameview.getContext(),R.drawable.pulo);
+        //player = MediaPlayer.create(gameview.getContext(),R.drawable.pulo);
     }
 
     public void ontouch(float y){
         if (!jumping) {
             if (y < gameview.getHeight() * 0.75) {
                 velocidade -= 50;
-                // som de marcação
-                player.start();
+                //player.start();
             } else {
                 velocidade += 10;
                 gameview.pontos = 0;
@@ -84,6 +83,10 @@ public class Beetle {
     public Rect GetBounds()
     {
         return new Rect(50,altura-height/2,(50 + (width / 2)), altura);
+    }
+
+    public int returnY() {
+        return altura;
     }
 
     public void onDraw(Canvas canvas)

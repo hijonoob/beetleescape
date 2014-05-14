@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,24 +19,38 @@ public class GameView extends SurfaceView {
     GameLoop gameLoop;
     SurfaceHolder holder;
 
-    public static int globalxSpeed = 10;
+    public static int globalxSpeed;
+    public static int globalySpeed;
+
+    boolean nivelando = false;
+    int contaNivel;
+    int buracoNivel;
 
     Bitmap background;
     Bitmap beetlebmp;
     Bitmap barreirabmp;
     Bitmap buracobmp;
+    Bitmap menubmp;
 
     //int xx = 0;
     int pontos = 0;
     int contadorx = 0;
-    int contadorBarreira = 0;
+    int contadorBarreira;
+    int contadorBuraco;
     int alturaBarreira = 1;
+    int alturaBuraco = 1;
+
+    int niveis;
+    int nivelCima;
+    int nivelBaixo;
 
     final Random barreiraRandom = new Random();
+    final Random buracoRandom = new Random();
 
     private List<Background> backgroundList = new ArrayList<Background>();
     private List<Beetle> beetleList = new ArrayList<Beetle>();
     private List<Barreira> barreiraList = new ArrayList<Barreira>();
+    private List<Buraco> buracoList = new ArrayList<Buraco>();
     //private Beetle beetlePlayer;
     //private static SharedPreferences prefs;
 
@@ -71,6 +84,7 @@ public class GameView extends SurfaceView {
         beetlebmp = BitmapFactory.decodeResource(getResources(), R.drawable.beetlesprite);
         barreirabmp = BitmapFactory.decodeResource(getResources(), R.drawable.barreira);
         buracobmp = BitmapFactory.decodeResource(getResources(), R.drawable.buraco);
+        menubmp = BitmapFactory.decodeResource(getResources(), R.drawable.menu);
     }
 
 
@@ -84,19 +98,6 @@ public class GameView extends SurfaceView {
         if (Menu.equals("Mainmenu")) {
             startGame();
         }
-/*        if (Menu =="Mainmenu")
-        {
-            for(int i = 0; i < buttons.size(); i++){
-                if (buttons.get(i).getState() == 1){   // Restart
-                    if ((buttons.get(i).getX()<e.getX() && buttons.get(i).getX()+84>e.getX())){
-                        if (buttons.get(i).getY()<e.getY() && buttons.get(i).getY()+32>e.getY()){
-                            Menu = "Running";
-                            startGame();}
-                    }
-                }
-
-            }
-        }*/
         return false;
     }
 
@@ -105,7 +106,9 @@ public class GameView extends SurfaceView {
             updatetimers();
             pontos+= globalxSpeed;
             contadorBarreira+=globalxSpeed;
+            contadorBuraco+=globalxSpeed;
             criaBarreira();
+            testaNivel();
         }
         /*if(Menu.equals("Mainmenu")) {
             // TODO
@@ -128,31 +131,60 @@ public class GameView extends SurfaceView {
         }*/
     }
 
+    public void testaNivel(){
+        if(nivelando) {
+            if (contaNivel<30) {
+                if (contaNivel < 6) {
+                    if (buracoNivel == 0) {
+                        globalySpeed += this.getHeight() / 9;
+                    } else if (buracoNivel ==1) {
+                        globalySpeed -= this.getHeight() / 9;
+                    }
+                }
+                contaNivel++;
+            } else {
+                nivelando = false;
+                contaNivel=0;
+            }
+        }
+    }
 
     public void addbackground(){
+        backgroundList.add(new Background(this,background,0,-this.getHeight()*2));
+        backgroundList.add(new Background(this,background,this.getWidth()*2,-this.getHeight()*2));
         backgroundList.add(new Background(this,background,0,0));
         backgroundList.add(new Background(this,background,this.getWidth()*2,0));
+        backgroundList.add(new Background(this,background,0,this.getHeight()*2));
+        backgroundList.add(new Background(this,background,this.getWidth()*2,this.getHeight()*2));
     }
 
     public void movebackground(){
 
-        //if (backgroundList.get(0).returnX()/10 == -this.getWidth()/10) {
-        //    backgroundList.add(new Background(this,background,this.getWidth(),0));
-        //}
-/*        if (backgroundList.get(0).returnX() == -this.getWidth()*2) {
-            backgroundList.remove(0);
-        }
-*/
-        /*for (int i = backgroundList.size()-1;i >= 0; i--) {
-            int backgroundx = backgroundList.get(i).returnX();
-            if (backgroundx <= -this.getWidth() * 2) {
-                backgroundList.remove(i);
-            }
-        }*/
         for (int i = backgroundList.size()-1;i >= 0; i--) {
             int backgroundx = backgroundList.get(i).returnX();
+            //int backgroundy = backgroundList.get(i).returnY();
             if (backgroundx <= -this.getWidth() * 2) {
-                backgroundList.get(i).setX(this.getWidth()*2);
+                // alterando posição x do fundo para contar com o X existente
+                backgroundList.get(i).setX(this.getWidth()*2 + (this.getWidth()*2 + backgroundx));
+            }
+
+            if (niveis >= 2) {
+                backgroundList.get(i).setY(0);
+                // TODO verificar essa lógica, há algo errado
+                if(i%2==0){
+                    backgroundList.get(i+1).setY(0);
+                } else {
+                    backgroundList.get(i-1).setY(0);
+                }
+                niveis = 0;
+            } else if (niveis <= -2) {
+                backgroundList.get(i).setY(1);
+                if(i%2==0){
+                    backgroundList.get(i+1).setY(1);
+                } else {
+                    backgroundList.get(i-1).setY(1);
+                }
+                niveis = 0;
             }
         }
 
@@ -162,39 +194,49 @@ public class GameView extends SurfaceView {
                 barreiraList.remove(i);
             }
         }
-/*
-        for (int i = backgroundList.size()-1;i >= 0; i--)
-        {
-            int backgroundx = backgroundList.get(i).returnX();
 
-            if (backgroundx<=-this.getWidth()){
-                pontos = 0;
-                //backgroundList.remove(i);
-                backgroundList.add(new Background(this,background,this.getWidth(),0));
-            }
-            if (backgroundx<=-this.getWidth()*2){
-                pontos = 0;
-                backgroundList.remove(i);
-                //backgroundList.add(new Background(this,background,this.getWidth(),0));
+        for (int i = buracoList.size()-1;i >= 0; i--) {
+            int buracox = buracoList.get(i).returnX();
+            if (buracox <= -this.getWidth() * 2) {
+                buracoList.remove(i);
             }
         }
-*/
+
     }
    public void startGame(){
+       contaNivel = 0;
+       nivelando=false;
+       contadorBarreira = 0;
+       contadorBuraco = 0;
+       buracoNivel = 0;
+       pontos = 0;
+       globalxSpeed = 20;
+       globalySpeed = 0;
+       niveis = 0;
+       nivelBaixo = 0;
+       nivelCima = 0;
+       contadorx = 0;
+       alturaBarreira = 1;
+       alturaBuraco = 1;
        Menu="Running";
        addbackground();
        beetleList.add(new Beetle(this,beetlebmp));
-       /* for(int i = 0; i < buttons.size(); i++){
-            buttons.remove(i);
-        }*/
     }
 
     public void criaBarreira() {
         if (contadorBarreira>2000) {
-            alturaBarreira = barreiraRandom.nextInt(3);
-            Log.i("info", String.valueOf(alturaBarreira));
-            barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth(), alturaBarreira, barreirabmp));
-            contadorBarreira = 0;
+            if (!nivelando) {
+                alturaBarreira = barreiraRandom.nextInt(3);
+                barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth() * 2, alturaBarreira, barreirabmp));
+                contadorBarreira = 0;
+            }
+        }
+        if (contadorBuraco>1000) {
+            if (!nivelando) {
+                alturaBuraco = buracoRandom.nextInt(2);
+                buracoList.add(new Buraco(this, buracoRandom.nextInt(this.getWidth()) + this.getWidth() * 2, alturaBuraco, buracobmp));
+                contadorBuraco = 0;
+            }
         }
     }
 
@@ -202,6 +244,9 @@ public class GameView extends SurfaceView {
        beetleList.remove(0);
        for(int i = 0; i < barreiraList.size(); i++) {
            barreiraList.remove(i);
+       }
+       for(int i = 0; i < buracoList.size(); i++) {
+           buracoList.remove(i);
        }
        for(int i = 0; i < backgroundList.size(); i++) {
            backgroundList.remove(i);
@@ -214,9 +259,8 @@ public class GameView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         update();
-        // If the game is running, draw it
         if (Menu.equals("Running")){
-            //addbackground();
+            canvas.drawColor(Color.BLACK);
             for(Background bbackground: backgroundList){
                 bbackground.onDraw(canvas);
             }
@@ -230,14 +274,36 @@ public class GameView extends SurfaceView {
                     Rect beetler = beetleList.get(0).GetBounds();
                     Rect spikesr = barreiraList.get(i).GetBounds();
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
-                        pontos = 0;
-                        globalxSpeed = 10;
                         endGame();
                         break;
                     }
                 }
             }
 
+            for(int i = 0; i < buracoList.size(); i++) {
+                buracoList.get(i).onDraw(canvas);
+                if (beetleList.size()>0) {
+                    Rect beetler = beetleList.get(0).GetBounds();
+                    Rect buracor = buracoList.get(i).GetBounds();
+                    if (buracoList.get(i).checkCollision(beetler, buracor)) {
+                        if(!nivelando) {
+                            if (beetleList.get(0).returnY() > (this.getHeight()/4)*3){
+                                buracoNivel = 1;
+                            } else {
+                                buracoNivel = 0;
+                            }
+                            if (buracoNivel==0) {
+                                niveis += 1;
+                                nivelCima++;
+                            } else if (buracoNivel==1) {
+                                niveis -= 1;
+                                nivelBaixo++;
+                            }
+                            nivelando = true;
+                        }
+                    }
+                }
+            }
 
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
@@ -247,15 +313,13 @@ public class GameView extends SurfaceView {
         }
         // If the menu is Main menu, draw the button
         if (Menu.equals("Mainmenu")) {
-            canvas.drawColor(Color.DKGRAY);
-            Paint textpaint = new Paint();
-            textpaint.setColor(Color.WHITE);
-            textpaint.setTextSize(32);
-            canvas.drawText("Iniciar Jogo", canvas.getWidth()/2-100, canvas.getHeight()/2, textpaint);
-            /* for(Buttons bbuttons: buttons)
-            {
-                bbuttons.onDraw(canvas);
-            }*/
+            Rect menuSrc = new Rect(0,0,menubmp.getWidth(),menubmp.getHeight());
+            Rect menuDst = new Rect(0,0,this.getWidth(), this.getHeight());
+            canvas.drawBitmap(menubmp, menuSrc,menuDst,null);
+            //Paint textpaint = new Paint();
+            //textpaint.setColor(Color.WHITE);
+            //textpaint.setTextSize(32);
+            //canvas.drawText("Iniciar Jogo", canvas.getWidth()/2-100, canvas.getHeight()/2, textpaint);
         }
     }
 }
