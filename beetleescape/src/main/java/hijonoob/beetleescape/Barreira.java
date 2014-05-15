@@ -43,17 +43,17 @@ public class Barreira {
                 altura = (int) (-gameview.getHeight()*0.25) + alturaRef;
                 break;
             case 1:
-                altura = (int) (gameview.getHeight()*0.75) + alturaRef;
+                altura = (int) (gameview.getHeight()*0.4) + alturaRef;
                 break;
             case 2:
-                altura = (int) (gameview.getHeight()*1.25) + alturaRef;
+                altura = (int) (gameview.getHeight()*1.1) + alturaRef;
                 break;
             default:
                 altura = (int) (gameview.getHeight()*0.75) + alturaRef;
                 break;
         }
 
-        return new Rect(x-gameview.getHeight()/16,altura + gameview.globalySpeed,x+gameview.getHeight()/2,altura+gameview.getHeight()/4 + gameview.globalySpeed);
+        return new Rect(x-gameview.getHeight()/10,altura + gameview.globalySpeed - gameview.getHeight()/6,x+gameview.getHeight()/10,altura+gameview.getHeight()/3 + gameview.globalySpeed);
     }
 
     public boolean checkCollision(Rect bettler, Rect barreirar){
@@ -86,8 +86,12 @@ public class Barreira {
         //canvas.drawCircle(x,alturaDesenho,gameview.getHeight()/4,paint);
 
         Rect src = new Rect(0,0,width,height);
-        Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/3 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2 + gameview.globalySpeed);
+        Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/2 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
+
+        //Paint paint = new Paint();
+        //paint.setColor(Color.GREEN);
+        //canvas.drawRect(x-gameview.getHeight()/10,altura + gameview.globalySpeed - gameview.getHeight()/6,x+gameview.getHeight()/10,altura+gameview.getHeight()/3 + gameview.globalySpeed, paint);
 
     }
 

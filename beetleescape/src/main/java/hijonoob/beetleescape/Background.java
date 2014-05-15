@@ -30,13 +30,13 @@ public class Background {
         return x;
     }
 
-    //public int returnY() { return y; }
+    public int returnY() { return y; }
 
     public void setY(int topo) {
         if (topo == 1){
-            y = y-gameview.getHeight()*6;
+            y += gameview.getHeight()*6;
         } else {
-            y = y+gameview.getHeight()*6;
+            y -= gameview.getHeight()*6;
         }
 }
 

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -23,6 +24,8 @@ public class GameView extends SurfaceView {
     public static int globalySpeed;
 
     boolean nivelando = false;
+    boolean menor;
+    boolean maior;
     int contaNivel;
     int buracoNivel;
 
@@ -137,7 +140,7 @@ public class GameView extends SurfaceView {
                 if (contaNivel < 6) {
                     if (buracoNivel == 0) {
                         globalySpeed += this.getHeight() / 9;
-                    } else if (buracoNivel ==1) {
+                    } else if (buracoNivel == 1) {
                         globalySpeed -= this.getHeight() / 9;
                     }
                 }
@@ -162,29 +165,43 @@ public class GameView extends SurfaceView {
 
         for (int i = backgroundList.size()-1;i >= 0; i--) {
             int backgroundx = backgroundList.get(i).returnX();
-            //int backgroundy = backgroundList.get(i).returnY();
+            int backgroundy = backgroundList.get(i).returnY();
             if (backgroundx <= -this.getWidth() * 2) {
                 // alterando posição x do fundo para contar com o X existente
                 backgroundList.get(i).setX(this.getWidth()*2 + (this.getWidth()*2 + backgroundx));
             }
-
-            if (niveis >= 2) {
-                backgroundList.get(i).setY(0);
-                // TODO verificar essa lógica, há algo errado
-                if(i%2==0){
-                    backgroundList.get(i+1).setY(0);
-                } else {
-                    backgroundList.get(i-1).setY(0);
+            if (niveis >= 3) {
+                menor = true;
+                for (int j = backgroundList.size()-1;j >= 0; j--) {
+                    if(backgroundy>backgroundList.get(j).returnY()){
+                        menor=false;
+                    }
                 }
-                niveis = 0;
-            } else if (niveis <= -2) {
-                backgroundList.get(i).setY(1);
-                if(i%2==0){
-                    backgroundList.get(i+1).setY(1);
-                } else {
-                    backgroundList.get(i-1).setY(1);
+                if (menor) {
+                    backgroundList.get(i).setY(0);
+                    if (i % 2 == 0) {
+                        backgroundList.get(i + 1).setY(0);
+                    } else {
+                        backgroundList.get(i - 1).setY(0);
+                    }
+                    niveis = 0;
                 }
-                niveis = 0;
+            } else if (niveis <= -3) {
+                maior = true;
+                for (int j = backgroundList.size()-1;j >= 0; j--) {
+                    if(backgroundy>backgroundList.get(j).returnY()){
+                        maior=false;
+                    }
+                }
+                if (maior) {
+                    backgroundList.get(i).setY(1);
+                    if (i % 2 == 0) {
+                        backgroundList.get(i + 1).setY(1);
+                    } else {
+                        backgroundList.get(i - 1).setY(1);
+                    }
+                    niveis = 0;
+                }
             }
         }
 
@@ -221,6 +238,9 @@ public class GameView extends SurfaceView {
        Menu="Running";
        addbackground();
        beetleList.add(new Beetle(this,beetlebmp));
+       barreiraList.add(new Barreira(this, this.getWidth()*4, 0, barreirabmp));
+       barreiraList.add(new Barreira(this, this.getWidth()*3, 1, barreirabmp));
+       barreiraList.add(new Barreira(this, this.getWidth()*2, 2, barreirabmp));
     }
 
     public void criaBarreira() {
@@ -274,7 +294,8 @@ public class GameView extends SurfaceView {
                     Rect beetler = beetleList.get(0).GetBounds();
                     Rect spikesr = barreiraList.get(i).GetBounds();
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
-                        endGame();
+                        // comentando o fim de jogo para testar o andamento do fundo
+                        // endGame();
                         break;
                     }
                 }
@@ -287,10 +308,18 @@ public class GameView extends SurfaceView {
                     Rect buracor = buracoList.get(i).GetBounds();
                     if (buracoList.get(i).checkCollision(beetler, buracor)) {
                         if(!nivelando) {
-                            if (beetleList.get(0).returnY() > (this.getHeight()/4)*3){
-                                buracoNivel = 1;
+                            Log.i("info", "altura buraco: " + String.valueOf(buracoList.get(i).returnHeight()));
+                            Log.i("info", "meia altura: " + String.valueOf(this.getHeight()/2));
+                            // deixei mais bugado pq ainda não arrumei
+                            // ideia é fazer ele imprimir o tamanho em relação a tela, se acima ótimo
+                            if (buracoList.get(i).returnHeight() < this.getHeight()/2){
+                                if(!beetleList.get(0).returnJumping()) {
+                                    buracoNivel = 0;
+                                }
                             } else {
-                                buracoNivel = 0;
+                                if(beetleList.get(0).returnJumping()) {
+                                    buracoNivel = 1;
+                                }
                             }
                             if (buracoNivel==0) {
                                 niveis += 1;

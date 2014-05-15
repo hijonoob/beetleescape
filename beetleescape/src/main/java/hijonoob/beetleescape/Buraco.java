@@ -2,6 +2,7 @@ package hijonoob.beetleescape;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -50,7 +51,7 @@ public class Buraco {
                 alturaDesenho = (int) (gameview.getHeight() * 0.75) + alturaRef;
                 break;
         }
-        return new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/10 + gameview.globalySpeed);
+        return new Rect(x-gameview.getHeight()/8,alturaDesenho-gameview.getHeight()/12 + gameview.globalySpeed,x + gameview.getHeight()/8, alturaDesenho+gameview.getHeight()/12 + gameview.globalySpeed);
     }
 
     public boolean checkCollision(Rect bettler, Rect buracor){
@@ -63,9 +64,9 @@ public class Buraco {
         return x;
     }
 
-    /*public int returnY() {
-        return y;
-    }*/
+    public int returnHeight() {
+        return (int) (alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed);
+    }
 
     public void onDraw(Canvas canvas) {
         update();
@@ -82,9 +83,12 @@ public class Buraco {
         }
 
         Rect src = new Rect(0,0,width,height);
-        Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/10 + gameview.globalySpeed);
+        Rect dst = new Rect(x-gameview.getHeight()/2,alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed,x + gameview.getHeight()/2, alturaDesenho+gameview.getHeight()/10 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
 
+        Paint paint = new Paint();
+        paint.setColor(Color.GREEN);
+        canvas.drawRect(x-gameview.getHeight()/8,alturaDesenho-gameview.getHeight()/12 + gameview.globalySpeed,x + gameview.getHeight()/8, alturaDesenho+gameview.getHeight()/12 + gameview.globalySpeed, paint);
     }
 
 }

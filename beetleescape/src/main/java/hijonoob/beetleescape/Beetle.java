@@ -89,6 +89,10 @@ public class Beetle {
         return altura;
     }
 
+    public boolean returnJumping() {
+        return jumping;
+    }
+
     public void onDraw(Canvas canvas)
     {
         update();
