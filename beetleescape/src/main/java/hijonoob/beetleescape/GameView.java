@@ -101,7 +101,11 @@ public class GameView extends SurfaceView {
         }
 
         if (Menu.equals("Mainmenu")) {
-            startGame();
+            if (e.getY() > this.getHeight()/3*2 && e.getX() > this.getWidth()/3*2) {
+                Menu="Estatistica";
+            } else {
+                startGame();
+            }
         } else if (Menu.equals("Estatistica")) {
             Menu="Mainmenu";
         } else if (Menu.equals("Running")) {
@@ -380,9 +384,9 @@ public class GameView extends SurfaceView {
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
             textpaint.setTextSize(40);
-            canvas.drawText("NESTA PARTIDA", canvas.getWidth()/10, canvas.getHeight()/10, textpaint);
+            canvas.drawText("NESTA PARTIDA", canvas.getWidth() / 10, canvas.getHeight() / 10, textpaint);
             textpaint.setTextSize(32);
-            canvas.drawText("Distância: " + pontos, canvas.getWidth()/10, canvas.getHeight()/2-100, textpaint);
+            canvas.drawText("Distância: " + pontos, canvas.getWidth() / 10, canvas.getHeight() / 2 - 100, textpaint);
             canvas.drawText("Níveis subidos: " + nivelCima, canvas.getWidth()/10, canvas.getHeight()/2, textpaint);
             canvas.drawText("Níveis descidos: " + nivelBaixo, canvas.getWidth()/10, canvas.getHeight()/2+100, textpaint);
             canvas.drawText("Barreiras destruídas: " + barreirasDestruidas, canvas.getWidth()/10, canvas.getHeight()/2+200, textpaint);
