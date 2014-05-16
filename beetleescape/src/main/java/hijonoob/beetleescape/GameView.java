@@ -27,6 +27,7 @@ public class GameView extends SurfaceView {
     boolean maior;
     int contaNivel;
     int buracoNivel;
+    int barreirasDestruidas;
 
     Bitmap background;
     Bitmap beetlebmp;
@@ -99,16 +100,18 @@ public class GameView extends SurfaceView {
             bbeetle.ontouch(e.getY());
         }
 
-        if (e.getY() < this.getHeight() * 0.75) {
-            // besouro pulando
-        } else {
-            if(barraFuria.returnFuria()==1) {
-                barraFuria.comecaFuria();
-            }
-        }
-
         if (Menu.equals("Mainmenu")) {
             startGame();
+        } else if (Menu.equals("Estatistica")) {
+            Menu="Mainmenu";
+        } else if (Menu.equals("Running")) {
+            if (e.getY() < this.getHeight() * 0.75) {
+                // besouro pulando
+            } else {
+                if(barraFuria.returnFuria()==1) {
+                    barraFuria.comecaFuria();
+                }
+            }
         }
         return false;
     }
@@ -285,7 +288,7 @@ public class GameView extends SurfaceView {
            backgroundList.remove(i);
        }
        // coloca em modo de menu
-       Menu="Mainmenu";
+       Menu="Estatistica";
     }
 
     @Override
@@ -308,6 +311,7 @@ public class GameView extends SurfaceView {
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
                         if (barraFuria.returnFuria()==2){
                             barreiraList.remove(i);
+                            barreirasDestruidas++;
                             break;
                         } else {
                             endGame();
@@ -354,7 +358,7 @@ public class GameView extends SurfaceView {
             canvas.drawText("Distância: " +  pontos/10 + " cm ", 0, 40, textpaint);
 
         }
-        // If the menu is Main menu, draw the button
+        // Se estiver no menu principal, imprime imagem
         if (Menu.equals("Mainmenu")) {
             Rect menuSrc = new Rect(0,0,menubmp.getWidth(),menubmp.getHeight());
             Rect menuDst = new Rect(0,0,this.getWidth(), this.getHeight());
@@ -363,6 +367,33 @@ public class GameView extends SurfaceView {
             //textpaint.setColor(Color.WHITE);
             //textpaint.setTextSize(32);
             //canvas.drawText("Iniciar Jogo", canvas.getWidth()/2-100, canvas.getHeight()/2, textpaint);
+        }
+
+        // se estiver na página de estatísticas imprimir fundo
+        if (Menu.equals("Estatistica")) {
+            Rect menuSrc = new Rect(0,0,menubmp.getWidth(),menubmp.getHeight());
+            Rect menuDst = new Rect(0,0,this.getWidth(), this.getHeight());
+            canvas.drawBitmap(menubmp, menuSrc,menuDst,null);
+
+            // textos de estatística
+            canvas.drawColor(Color.BLACK);
+            Paint textpaint = new Paint();
+            textpaint.setColor(Color.WHITE);
+            textpaint.setTextSize(40);
+            canvas.drawText("NESTA PARTIDA", canvas.getWidth()/10, canvas.getHeight()/10, textpaint);
+            textpaint.setTextSize(32);
+            canvas.drawText("Distância: " + pontos, canvas.getWidth()/10, canvas.getHeight()/2-100, textpaint);
+            canvas.drawText("Níveis subidos: " + nivelCima, canvas.getWidth()/10, canvas.getHeight()/2, textpaint);
+            canvas.drawText("Níveis descidos: " + nivelBaixo, canvas.getWidth()/10, canvas.getHeight()/2+100, textpaint);
+            canvas.drawText("Barreiras destruídas: " + barreirasDestruidas, canvas.getWidth()/10, canvas.getHeight()/2+200, textpaint);
+
+            textpaint.setTextSize(40);
+            canvas.drawText("RECORDES", canvas.getWidth()/2, canvas.getHeight()/10, textpaint);
+            textpaint.setTextSize(32);
+            canvas.drawText("Distância: " + pontos, canvas.getWidth()/2, canvas.getHeight()/2-100, textpaint);
+            canvas.drawText("Níveis subidos: " + nivelCima, canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
+            canvas.drawText("Níveis descidos: " + nivelBaixo, canvas.getWidth()/2, canvas.getHeight()/2+100, textpaint);
+            canvas.drawText("Barreiras destruídas: " + barreirasDestruidas, canvas.getWidth()/2, canvas.getHeight()/2+200, textpaint);
         }
     }
 }
