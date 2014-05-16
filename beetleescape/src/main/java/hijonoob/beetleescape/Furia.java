@@ -17,6 +17,7 @@ public class Furia {
     int height;
     int encher = 1;
     int baixar = 1000;
+    int largura;
     private Bitmap bmp;
 
     public Furia(GameView gameview, Bitmap bmp){
@@ -29,10 +30,10 @@ public class Furia {
     public void update(){
         if(encher<=1000){
             Log.i("info", "encher " + encher);
-            encher += gameview.globalxSpeed;
+            encher += gameview.globalxSpeed/2;
         } else if (baixar>=0) {
             Log.i("info", "baixar " + baixar);
-            baixar -= gameview.globalxSpeed/2;
+            baixar -= gameview.globalxSpeed;
         } else {
             encher = 1;
             baixar = 1000;
@@ -55,13 +56,21 @@ public class Furia {
         //Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/2 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2 + gameview.globalySpeed);
         //canvas.drawBitmap(bmp,src,dst,null);
 
+        //gameview.getWidth = 100
+
+
         Paint paint = new Paint();
         if (encher<=1000) {
             paint.setColor(Color.GREEN);
-            //canvas.drawRect(0,gameview.getHeight()-60,(gameview.getWidth() / 1000) * encher,gameview.getHeight(), paint);
+            largura = gameview.getWidth() - ((gameview.getWidth()*encher)/1000);
+            Log.i("info", "largura verde " + largura);
+            canvas.drawRect(0,gameview.getHeight()-60,largura,gameview.getHeight(), paint);
         } else {
             paint.setColor(Color.RED);
+            largura = (gameview.getWidth()*encher)/1000;
+            Log.i("info", "largura vermelho " + largura);
             //canvas.drawRect(0,gameview.getHeight()-60,(gameview.getWidth() / 1000) * baixar, gameview.getHeight(), paint);
+            canvas.drawRect(0,gameview.getHeight()-60,gameview.getWidth()/10,gameview.getHeight(), paint);
         }
 
 
