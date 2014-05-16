@@ -96,9 +96,6 @@ public class Beetle {
     public void onDraw(Canvas canvas)
     {
         update();
-        //canvas.drawBitmap(bmp, 30, altura, null);
-        //canvas.drawCircle(50, altura, 30, paint);
-
         int srcX = mcurrentFrame*width;
         int srcY = 0;
         Rect src = new Rect(srcX,srcY,srcX + width,srcY+height);

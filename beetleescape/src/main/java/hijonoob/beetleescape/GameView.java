@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -167,13 +166,12 @@ public class GameView extends SurfaceView {
             int backgroundx = backgroundList.get(i).returnX();
             int backgroundy = backgroundList.get(i).returnY();
             if (backgroundx <= -this.getWidth() * 2) {
-                // alterando posição x do fundo para contar com o X existente
                 backgroundList.get(i).setX(this.getWidth()*2 + (this.getWidth()*2 + backgroundx));
             }
             if (niveis >= 3) {
                 menor = true;
                 for (int j = backgroundList.size()-1;j >= 0; j--) {
-                    if(backgroundy>backgroundList.get(j).returnY()){
+                    if(backgroundy<backgroundList.get(j).returnY()){
                         menor=false;
                     }
                 }
@@ -205,6 +203,7 @@ public class GameView extends SurfaceView {
             }
         }
 
+        // remove barreiras que já passaram do jogador
         for (int i = barreiraList.size()-1;i >= 0; i--) {
             int barreirax = barreiraList.get(i).returnX();
             if (barreirax <= -this.getWidth() * 2) {
@@ -212,6 +211,7 @@ public class GameView extends SurfaceView {
             }
         }
 
+        // remove buracos que já passaram do jogador
         for (int i = buracoList.size()-1;i >= 0; i--) {
             int buracox = buracoList.get(i).returnX();
             if (buracox <= -this.getWidth() * 2) {
@@ -221,6 +221,8 @@ public class GameView extends SurfaceView {
 
     }
    public void startGame(){
+       // Coloca todos os valores no padrão
+       // para uma nova partida
        contaNivel = 0;
        nivelando=false;
        contadorBarreira = 0;
@@ -235,17 +237,14 @@ public class GameView extends SurfaceView {
        contadorx = 0;
        alturaBarreira = 1;
        alturaBuraco = 1;
-       Menu="Running";
-       addbackground();
-       beetleList.add(new Beetle(this,beetlebmp));
-       barreiraList.add(new Barreira(this, this.getWidth()*4, 0, barreirabmp));
-       barreiraList.add(new Barreira(this, this.getWidth()*3, 1, barreirabmp));
-       barreiraList.add(new Barreira(this, this.getWidth()*2, 2, barreirabmp));
+       Menu="Running";  // coloca em modo de jogo
+       addbackground(); // adiciona os fundos
+       beetleList.add(new Beetle(this,beetlebmp)); // adiciona o besouro
     }
 
     public void criaBarreira() {
         if (contadorBarreira>2000) {
-            if (!nivelando) {
+            if (!nivelando) { // apenas criamos se não estiver subindo ou descendo para não gerar em posição intermediária
                 alturaBarreira = barreiraRandom.nextInt(3);
                 barreiraList.add(new Barreira(this, barreiraRandom.nextInt(this.getWidth()) + this.getWidth() * 2, alturaBarreira, barreirabmp));
                 contadorBarreira = 0;
@@ -261,19 +260,21 @@ public class GameView extends SurfaceView {
     }
 
    public void endGame(){
-       beetleList.remove(0);
+       beetleList.remove(0); // remove o besouro
+       // remove todas as barreiras
        for(int i = 0; i < barreiraList.size(); i++) {
            barreiraList.remove(i);
        }
+       // remove todos os buracos
        for(int i = 0; i < buracoList.size(); i++) {
            buracoList.remove(i);
        }
+       // remove todos os fundos
        for(int i = 0; i < backgroundList.size(); i++) {
            backgroundList.remove(i);
        }
+       // coloca em modo de menu
        Menu="Mainmenu";
-       //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2,3));
-       //buttons.add(new Buttons(this,buttonsbmp,this.getWidth()/2-64,this.getHeight()/2+48,1));
     }
 
     @Override
@@ -294,8 +295,7 @@ public class GameView extends SurfaceView {
                     Rect beetler = beetleList.get(0).GetBounds();
                     Rect spikesr = barreiraList.get(i).GetBounds();
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
-                        // comentando o fim de jogo para testar o andamento do fundo
-                        // endGame();
+                        endGame();
                         break;
                     }
                 }
@@ -308,23 +308,18 @@ public class GameView extends SurfaceView {
                     Rect buracor = buracoList.get(i).GetBounds();
                     if (buracoList.get(i).checkCollision(beetler, buracor)) {
                         if(!nivelando) {
-                            Log.i("info", "altura buraco: " + String.valueOf(buracoList.get(i).returnHeight()));
-                            Log.i("info", "meia altura: " + String.valueOf(this.getHeight()/2));
-                            // deixei mais bugado pq ainda não arrumei
-                            // ideia é fazer ele imprimir o tamanho em relação a tela, se acima ótimo
+                            // realizar teste com jogo longo, muitos passos para baixo e para cima
                             if (buracoList.get(i).returnHeight() < this.getHeight()/2){
-                                if(!beetleList.get(0).returnJumping()) {
                                     buracoNivel = 0;
-                                }
                             } else {
-                                if(beetleList.get(0).returnJumping()) {
                                     buracoNivel = 1;
-                                }
                             }
                             if (buracoNivel==0) {
+                                //Log.i("info", "subiu nível");
                                 niveis += 1;
                                 nivelCima++;
                             } else if (buracoNivel==1) {
+                                //Log.i("info", "desceu nível");
                                 niveis -= 1;
                                 nivelBaixo++;
                             }

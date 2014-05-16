@@ -2,8 +2,6 @@ package hijonoob.beetleescape;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
@@ -12,7 +10,7 @@ import android.graphics.Rect;
  */
 public class Buraco {
     GameView gameview;
-    Paint paint;
+    //Paint paint;
     int x;
     int y;
     int width;
@@ -86,9 +84,10 @@ public class Buraco {
         Rect dst = new Rect(x-gameview.getHeight()/2,alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed,x + gameview.getHeight()/2, alturaDesenho+gameview.getHeight()/10 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
 
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        canvas.drawRect(x-gameview.getHeight()/8,alturaDesenho-gameview.getHeight()/12 + gameview.globalySpeed,x + gameview.getHeight()/8, alturaDesenho+gameview.getHeight()/12 + gameview.globalySpeed, paint);
+        // Desenho de sólido para ajuste fino de colisão
+        //Paint paint = new Paint();
+        //paint.setColor(Color.GREEN);
+        //canvas.drawRect(x-gameview.getHeight()/8,alturaDesenho-gameview.getHeight()/12 + gameview.globalySpeed,x + gameview.getHeight()/8, alturaDesenho+gameview.getHeight()/12 + gameview.globalySpeed, paint);
     }
 
 }

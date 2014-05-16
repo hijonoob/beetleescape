@@ -74,7 +74,7 @@ public class Barreira {
                 alturaDesenho = (int) (gameview.getHeight() * -0.15) + alturaRef;
                 break;
             case 1:
-                alturaDesenho = (int) (gameview.getHeight() * 0.5) + alturaRef;
+                alturaDesenho = (int) (gameview.getHeight() * 0.55) + alturaRef;
                 break;
             case 2:
                 alturaDesenho = (int) (gameview.getHeight() * 1.15) + alturaRef;
@@ -83,12 +83,12 @@ public class Barreira {
                 alturaDesenho = (int) (gameview.getHeight() * 0.5) + alturaRef;
                 break;
         }
-        //canvas.drawCircle(x,alturaDesenho,gameview.getHeight()/4,paint);
 
         Rect src = new Rect(0,0,width,height);
         Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/2 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
 
+        // Desenho de sólido para ajuste fino de colisão
         //Paint paint = new Paint();
         //paint.setColor(Color.GREEN);
         //canvas.drawRect(x-gameview.getHeight()/10,altura + gameview.globalySpeed - gameview.getHeight()/6,x+gameview.getHeight()/10,altura+gameview.getHeight()/3 + gameview.globalySpeed, paint);
