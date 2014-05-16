@@ -71,11 +71,13 @@ public class Furia {
         Paint paint = new Paint();
         if (encher<=1000) {
             paint.setColor(Color.GREEN);
-            largura = gameview.getWidth() - ((gameview.getWidth()*encher)/1000);
+            paint.setAlpha(40);
+            largura = (gameview.getWidth()*encher)/1000;
             //Log.i("info", "largura verde " + largura);
             canvas.drawRect(0,gameview.getHeight()-60,largura,gameview.getHeight(), paint);
         } else {
             paint.setColor(Color.RED);
+            paint.setAlpha(40);
             largura = (gameview.getWidth()*baixar)/1000;
             //Log.i("info", "largura vermelho " + largura);
             canvas.drawRect(0,gameview.getHeight()-60,largura,gameview.getHeight(), paint);
