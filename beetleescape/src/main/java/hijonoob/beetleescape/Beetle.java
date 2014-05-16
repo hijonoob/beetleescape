@@ -47,10 +47,10 @@ public class Beetle {
             if (y < gameview.getHeight() * 0.75) {
                 velocidade -= 50;
                 //player.start();
-            } else {
+            }/* else {
                 velocidade += 10;
                 gameview.pontos = 0;
-            }
+            }*/
             jumping = true;
         }
     }

@@ -99,6 +99,14 @@ public class GameView extends SurfaceView {
             bbeetle.ontouch(e.getY());
         }
 
+        if (e.getY() < this.getHeight() * 0.75) {
+            // besouro pulando
+        } else {
+            if(barraFuria.returnFuria()==1) {
+                barraFuria.comecaFuria();
+            }
+        }
+
         if (Menu.equals("Mainmenu")) {
             startGame();
         }
@@ -298,8 +306,14 @@ public class GameView extends SurfaceView {
                     Rect beetler = beetleList.get(0).GetBounds();
                     Rect spikesr = barreiraList.get(i).GetBounds();
                     if (barreiraList.get(i).checkCollision(beetler, spikesr)) {
-                        endGame();
-                        break;
+                        if (barraFuria.returnFuria()==2){
+                            barreiraList.remove(i);
+                            break;
+                        } else {
+                            endGame();
+                            break;
+                        }
+
                     }
                 }
             }
