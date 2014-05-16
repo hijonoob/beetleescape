@@ -53,7 +53,9 @@ public class GameView extends SurfaceView {
     private List<Beetle> beetleList = new ArrayList<Beetle>();
     private List<Barreira> barreiraList = new ArrayList<Barreira>();
     private List<Buraco> buracoList = new ArrayList<Buraco>();
-    //private Beetle beetlePlayer;
+
+    private Furia barraFuria;
+
     //private static SharedPreferences prefs;
 
     private String Menu = "Mainmenu";
@@ -240,6 +242,7 @@ public class GameView extends SurfaceView {
        Menu="Running";  // coloca em modo de jogo
        addbackground(); // adiciona os fundos
        beetleList.add(new Beetle(this,beetlebmp)); // adiciona o besouro
+       barraFuria = new Furia(this,beetlebmp);
     }
 
     public void criaBarreira() {
@@ -328,6 +331,8 @@ public class GameView extends SurfaceView {
                     }
                 }
             }
+
+            barraFuria.onDraw(canvas);
 
             Paint textpaint = new Paint();
             textpaint.setColor(Color.WHITE);
