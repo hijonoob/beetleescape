@@ -1,6 +1,7 @@
 package hijonoob.beetleescape;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,6 +22,11 @@ public class GameView extends SurfaceView {
 
     public static int globalxSpeed;
     public static int globalySpeed;
+
+    public static int pontosMax = 0;
+    public static int nivelCimaMax = 0;
+    public static int nivelBaixoMax = 0;
+    public static int barreirasDestruidasMax = 0;
 
     boolean nivelando = false;
     boolean menor;
@@ -57,20 +63,35 @@ public class GameView extends SurfaceView {
 
     private Furia barraFuria;
 
-    //private static SharedPreferences prefs;
+    private static SharedPreferences prefs;
 
     private String Menu = "Mainmenu";
 
+    private String pontosMaxS = "pontos";
+    private String nivelCimaMaxS = "nivelCima";
+    private String nivelBaixoMaxS = "nivelBaixo";
+    private String barreirasDestruidasMaxS = "barreirasDestruidas";
+
     public GameView(Context context) {
         super(context);
-        //prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
-        //String spackage ="hijonoob.beetleescape";
+        prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
+        String spackage ="hijonoob.beetleescape";
+        pontosMax= prefs.getInt(pontosMaxS , 0);
+        nivelCimaMax= prefs.getInt(nivelCimaMaxS , 0);
+        nivelBaixoMax= prefs.getInt(nivelBaixoMaxS , 0);
+        barreirasDestruidasMax= prefs.getInt(barreirasDestruidasMaxS , 0);
+
+
         gameLoop = new GameLoop(this);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
             public void surfaceDestroyed(SurfaceHolder arg0) {
                 // TODO Auto-generated method stub
+                prefs.edit().putInt(pontosMaxS,pontosMax).commit();
+                prefs.edit().putInt(nivelCimaMaxS,nivelCimaMax).commit();
+                prefs.edit().putInt(nivelBaixoMaxS,nivelBaixoMax).commit();
+                prefs.edit().putInt(barreirasDestruidasMaxS,barreirasDestruidasMax).commit();
                 gameLoop.running = false;
             }
 
@@ -278,6 +299,21 @@ public class GameView extends SurfaceView {
     }
 
    public void endGame(){
+
+       if (pontos > pontosMax) {
+           pontosMax = pontos;
+       }
+       if (nivelCima > nivelCimaMax) {
+           nivelCimaMax = nivelCima;
+       }
+       if (nivelBaixo > nivelBaixoMax) {
+           nivelBaixoMax = nivelBaixo;
+       }
+       if (barreirasDestruidas > barreirasDestruidasMax) {
+           barreirasDestruidasMax = barreirasDestruidas;
+       }
+
+
        beetleList.remove(0); // remove o besouro
        // remove todas as barreiras
        for(int i = 0; i < barreiraList.size(); i++) {
@@ -394,10 +430,10 @@ public class GameView extends SurfaceView {
             textpaint.setTextSize(40);
             canvas.drawText("RECORDES", canvas.getWidth()/2, canvas.getHeight()/10, textpaint);
             textpaint.setTextSize(32);
-            canvas.drawText("Distância: " + pontos, canvas.getWidth()/2, canvas.getHeight()/2-100, textpaint);
-            canvas.drawText("Níveis subidos: " + nivelCima, canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
-            canvas.drawText("Níveis descidos: " + nivelBaixo, canvas.getWidth()/2, canvas.getHeight()/2+100, textpaint);
-            canvas.drawText("Barreiras destruídas: " + barreirasDestruidas, canvas.getWidth()/2, canvas.getHeight()/2+200, textpaint);
+            canvas.drawText("Distância: " + pontosMax, canvas.getWidth()/2, canvas.getHeight()/2-100, textpaint);
+            canvas.drawText("Níveis subidos: " + nivelCimaMax, canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
+            canvas.drawText("Níveis descidos: " + nivelBaixoMax, canvas.getWidth()/2, canvas.getHeight()/2+100, textpaint);
+            canvas.drawText("Barreiras destruídas: " + barreirasDestruidasMax, canvas.getWidth()/2, canvas.getHeight()/2+200, textpaint);
         }
     }
 }
