@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 
 /**
  * Created by dbarbato on 24/04/14.
@@ -27,7 +26,7 @@ public class Beetle {
     private int colunas = 4;
     Paint paint;
 
-    MediaPlayer player;
+    //MediaPlayer player;
 
     public Beetle(GameView gameview, Bitmap bmp){
         this.gameview = gameview;
@@ -46,11 +45,7 @@ public class Beetle {
         if (!jumping) {
             if (y < gameview.getHeight() * 0.75) {
                 velocidade -= 50;
-                //player.start();
-            }/* else {
-                velocidade += 10;
-                gameview.pontos = 0;
-            }*/
+            }
             jumping = true;
         }
     }
