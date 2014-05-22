@@ -292,6 +292,7 @@ public class GameView extends SurfaceView {
        nivelando=false;
        contadorBarreira = 0;
        contadorBuraco = 0;
+       barreirasDestruidas = 0;
        buracoNivel = 0;
        pontos = 0;
        globalxSpeed = 20;
@@ -467,7 +468,7 @@ public class GameView extends SurfaceView {
             textpaint.setTextSize(40);
             canvas.drawText("NESTA PARTIDA", canvas.getWidth() / 10, canvas.getHeight() / 2 - 72, textpaint);
             textpaint.setTextSize(32);
-            canvas.drawText("Distância: " + pontos, canvas.getWidth() / 10, canvas.getHeight() / 2 - 32, textpaint);
+            canvas.drawText("Distância (mm): " + pontos, canvas.getWidth() / 10, canvas.getHeight() / 2 - 32, textpaint);
             canvas.drawText("Níveis subidos: " + nivelCima, canvas.getWidth()/10, canvas.getHeight()/2, textpaint);
             canvas.drawText("Níveis descidos: " + nivelBaixo, canvas.getWidth()/10, canvas.getHeight()/2+32, textpaint);
             canvas.drawText("Barreiras destruídas: " + barreirasDestruidas, canvas.getWidth()/10, canvas.getHeight()/2+64, textpaint);
@@ -475,7 +476,7 @@ public class GameView extends SurfaceView {
             textpaint.setTextSize(40);
             canvas.drawText("RECORDES", canvas.getWidth()/2, canvas.getHeight()/2 - 72, textpaint);
             textpaint.setTextSize(32);
-            canvas.drawText("Distância: " + pontosMax, canvas.getWidth()/2, canvas.getHeight()/2-32, textpaint);
+            canvas.drawText("Distância (mm): " + pontosMax, canvas.getWidth()/2, canvas.getHeight()/2-32, textpaint);
             canvas.drawText("Níveis subidos: " + nivelCimaMax, canvas.getWidth()/2, canvas.getHeight()/2, textpaint);
             canvas.drawText("Níveis descidos: " + nivelBaixoMax, canvas.getWidth()/2, canvas.getHeight()/2+32, textpaint);
             canvas.drawText("Barreiras destruídas: " + barreirasDestruidasMax, canvas.getWidth()/2, canvas.getHeight()/2+64, textpaint);
