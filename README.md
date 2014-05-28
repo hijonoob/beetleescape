@@ -9,7 +9,7 @@ Beetle Escape é um Infinite Runner desenvolvido como projeto do curso de Tecnol
 Contribuidores
 -----------------
 
-Bettle Escape atualmente conta como seu Development Team:
+Beetle Escape foi desenvolvido pelos alunos:
 
 - Danilo Sartorelli Barbato
 - Lucas Vinicius Brandt Ferres
@@ -19,4 +19,4 @@ Bettle Escape atualmente conta como seu Development Team:
 Versão
 -------------------
 
-O jogo está em versão inicial de desenvolvimento, ainda sem release candidate.
+O jogo está em versão alpha, com release na Play Store: https://play.google.com/store/apps/details?id=hijonoob.beetleescape
