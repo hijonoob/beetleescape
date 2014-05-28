@@ -10,7 +10,6 @@ import android.graphics.Rect;
  */
 public class Buraco {
     GameView gameview;
-    //Paint paint;
     int x;
     int y;
     int width;
@@ -79,15 +78,9 @@ public class Buraco {
                 alturaDesenho = (int) (gameview.getHeight() * 0.85) + alturaRef;
                 break;
         }
-
         Rect src = new Rect(0,0,width,height);
         Rect dst = new Rect(x-gameview.getHeight()/2,alturaDesenho-gameview.getHeight()/10 + gameview.globalySpeed,x + gameview.getHeight()/2, alturaDesenho+gameview.getHeight()/10 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
-
-        // Desenho de sólido para ajuste fino de colisão
-        //Paint paint = new Paint();
-        //paint.setColor(Color.GREEN);
-        //canvas.drawRect(x-gameview.getHeight()/8,alturaDesenho-gameview.getHeight()/12 + gameview.globalySpeed,x + gameview.getHeight()/8, alturaDesenho+gameview.getHeight()/12 + gameview.globalySpeed, paint);
     }
 
 }

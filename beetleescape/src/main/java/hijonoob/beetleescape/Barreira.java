@@ -10,7 +10,6 @@ import android.graphics.Rect;
  */
 public class Barreira {
     GameView gameview;
-    //Paint paint;
     int x;
     int y;
     int width;
@@ -57,7 +56,6 @@ public class Barreira {
     }
 
     public boolean checkCollision(Rect bettler, Rect barreirar){
-        //Log.i("info", String.valueOf(alturaRef));
         this.bettler = bettler;
         this.barreirar = barreirar;
         return Rect.intersects(bettler, barreirar);
@@ -87,12 +85,6 @@ public class Barreira {
         Rect src = new Rect(0,0,width,height);
         Rect dst = new Rect(x-gameview.getHeight()/3,alturaDesenho-gameview.getHeight()/2 + gameview.globalySpeed,x + gameview.getHeight()/3, alturaDesenho+gameview.getHeight()/2 + gameview.globalySpeed);
         canvas.drawBitmap(bmp,src,dst,null);
-
-        // Desenho de sólido para ajuste fino de colisão
-        //Paint paint = new Paint();
-        //paint.setColor(Color.GREEN);
-        //canvas.drawRect(x-gameview.getHeight()/10,altura + gameview.globalySpeed - gameview.getHeight()/6,x+gameview.getHeight()/10,altura+gameview.getHeight()/3 + gameview.globalySpeed, paint);
-
     }
 
 }

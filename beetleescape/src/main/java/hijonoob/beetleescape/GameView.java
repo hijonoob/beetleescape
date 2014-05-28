@@ -26,10 +26,10 @@ public class GameView extends SurfaceView {
     public static int globalxSpeed;
     public static int globalySpeed;
     // Variáveis de pontuação máxima
-    public static int pontosMax = 0;
-    public static int nivelCimaMax = 0;
-    public static int nivelBaixoMax = 0;
-    public static int barreirasDestruidasMax = 0;
+    public static String pontosMax = "0";
+    public static String nivelCimaMax = "0";
+    public static String nivelBaixoMax = "0";
+    public static String barreirasDestruidasMax = "0";
     // Strings das pontuações máximas
     private String pontosMaxS = "pontos";
     private String nivelCimaMaxS = "nivelCima";
@@ -82,12 +82,18 @@ public class GameView extends SurfaceView {
     public GameView(final Context context) {
         super(context);
         // Recuperando dados salvas nas configurações de preferências do jogo ao iniciar
-        prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
+        //prefs = context.getSharedPreferences("hijonoob.beetleescape",Context.MODE_PRIVATE);
+        final SecurePreferences prefs = new SecurePreferences(context, "hijonoob.beetleescape", "cr6vSjXDkSB7jszv", true);
         String spackage ="hijonoob.beetleescape";
-        pontosMax= prefs.getInt(pontosMaxS , 0);
-        nivelCimaMax= prefs.getInt(nivelCimaMaxS , 0);
-        nivelBaixoMax= prefs.getInt(nivelBaixoMaxS , 0);
-        barreirasDestruidasMax= prefs.getInt(barreirasDestruidasMaxS , 0);
+        pontosMax= prefs.getString("pontosMaxS");
+        nivelCimaMax= prefs.getString("nivelCimaMaxS");
+        nivelBaixoMax= prefs.getString("nivelBaixoMaxS");
+        barreirasDestruidasMax= prefs.getString("barreirasDestruidasMaxS");
+        // para o primeiro jogo onde as strings são null definimos como "0";
+        if (pontosMax == null) { pontosMax = "0";}
+        if (nivelCimaMax == null) { nivelCimaMax = "0";}
+        if (nivelBaixoMax == null) { nivelBaixoMax = "0";}
+        if (barreirasDestruidasMax == null) { barreirasDestruidasMax = "0";}
         sPool = new SoundPool(3,AudioManager.STREAM_MUSIC,0);
         pulaSomID = sPool.load(this.getContext(), R.drawable.pulo, 1);
         furiaSomID = sPool.load(this.getContext(), R.drawable.furious, 1);
@@ -100,10 +106,10 @@ public class GameView extends SurfaceView {
 
             public void surfaceDestroyed(SurfaceHolder arg0) {
                 // Salvando os dados nas configurações de preferências do jogo ao sair
-                prefs.edit().putInt(pontosMaxS,pontosMax).commit();
-                prefs.edit().putInt(nivelCimaMaxS,nivelCimaMax).commit();
-                prefs.edit().putInt(nivelBaixoMaxS,nivelBaixoMax).commit();
-                prefs.edit().putInt(barreirasDestruidasMaxS,barreirasDestruidasMax).commit();
+                prefs.put("pontosMaxS", String.valueOf(pontosMax));
+                prefs.put("nivelCimaMaxS", String.valueOf(nivelCimaMax));
+                prefs.put("nivelBaixoMaxS", String.valueOf(nivelBaixoMax));
+                prefs.put("barreirasDestruidasMaxS", String.valueOf(barreirasDestruidasMax));
                 gameLoop.running = false;
             }
 
@@ -327,19 +333,18 @@ public class GameView extends SurfaceView {
     }
 
    public void endGame(){
-
        // Compara pontuações da partida com as melhores
-       if (pontos > pontosMax) {
-           pontosMax = pontos;
+       if (pontos > Integer.parseInt(pontosMax)) {
+           pontosMax = String.valueOf(pontos);
        }
-       if (nivelCima > nivelCimaMax) {
-           nivelCimaMax = nivelCima;
+       if (nivelCima > Integer.parseInt(nivelCimaMax)) {
+           nivelCimaMax = String.valueOf(nivelCima);
        }
-       if (nivelBaixo > nivelBaixoMax) {
-           nivelBaixoMax = nivelBaixo;
+       if (nivelBaixo > Integer.parseInt(nivelBaixoMax)) {
+           nivelBaixoMax = String.valueOf(nivelBaixo);
        }
-       if (barreirasDestruidas > barreirasDestruidasMax) {
-           barreirasDestruidasMax = barreirasDestruidas;
+       if (barreirasDestruidas > Integer.parseInt(barreirasDestruidasMax)) {
+           barreirasDestruidasMax = String.valueOf(barreirasDestruidas);
        }
        // remove o besouro
        beetleList.remove(0);

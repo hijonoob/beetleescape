@@ -26,8 +26,6 @@ public class Beetle {
     private int colunas = 4;
     Paint paint;
 
-    //MediaPlayer player;
-
     public Beetle(GameView gameview, Bitmap bmp){
         this.gameview = gameview;
         this.bmp = bmp;
@@ -37,8 +35,6 @@ public class Beetle {
         paint = new Paint();
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
-
-        //player = MediaPlayer.create(gameview.getContext(),R.drawable.pulo);
     }
 
     public void ontouch(float y){
@@ -97,5 +93,4 @@ public class Beetle {
         Rect dst = new Rect(50,altura-height/2,(50 + (width / 2)), altura);
         canvas.drawBitmap(bmp,src,dst,null);
     }
-
 }
